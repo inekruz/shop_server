@@ -1,8 +1,8 @@
 module.exports = {
     dbConfig: {
-      user: 'nekruz',      
+      user: 'admin',      
       host: '79.174.89.12',    
-      database: 'nekruz',    
+      database: 'shop',    
       password: '@Admin007.@',  
       port: 19216,          
     }
