@@ -67,7 +67,7 @@ client.connect()
 
           // Генерируем продавцов
           const users = [];
-          for (let i = 1; i < 15; i++) {
+          for (let i = 2; i < 15; i++) {
               const login = `user${i + 1}`;
               const fullname = `Пользователь ${i + 1}`;
               const address = `Адрес ${i + 1}`;
