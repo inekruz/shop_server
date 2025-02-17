@@ -23,88 +23,88 @@ client.connect()
   .then(() => console.log('Подключение к базе данных успешно!'))
   .catch(err => console.error('Ошибка подключения к базе данных:', err));
 
-  const categories = ['Еда', 'Книги', 'Посуда', 'Аксессуары', 'Электроника', 'Одежда', 'Игрушки', 'Спорт', 'Косметика'];
+//   const categories = ['Еда', 'Книги', 'Посуда', 'Аксессуары', 'Электроника', 'Одежда', 'Игрушки', 'Спорт', 'Косметика'];
   
-  function generateRandomPassword(length = 10) {
-      return crypto.randomBytes(length).toString('hex').slice(0, length); 
-  }
+//   function generateRandomPassword(length = 10) {
+//       return crypto.randomBytes(length).toString('hex').slice(0, length); 
+//   }
 
-  async function addUser(login, fullname, address, phone_number, password, role) {
-      const hashedPassword = hashPassword(password);
-      const roleValue = role === 'Продавец' ? 1 : 0;
+//   async function addUser(login, fullname, address, phone_number, password, role) {
+//       const hashedPassword = hashPassword(password);
+//       const roleValue = role === 'Продавец' ? 1 : 0;
   
-      const query = 'INSERT INTO Users (login, fullname, address, phone_number, password, role) VALUES ($1, $2, $3, $4, $5, $6)';
-      await client.query(query, [login, fullname, address, phone_number, hashedPassword, roleValue]);
-      console.log(`Пользователь добавлен: ${login}`);
-  }
+//       const query = 'INSERT INTO Users (login, fullname, address, phone_number, password, role) VALUES ($1, $2, $3, $4, $5, $6)';
+//       await client.query(query, [login, fullname, address, phone_number, hashedPassword, roleValue]);
+//       console.log(`Пользователь добавлен: ${login}`);
+//   }
   
-  async function fetchProduct() {
-    const url = 'https://fakerapi.it/api/v1/products?_quantity=1';
-    let attempts = 0;
-    const maxAttempts = 5;
+//   async function fetchProduct() {
+//     const url = 'https://fakerapi.it/api/v1/products?_quantity=1';
+//     let attempts = 0;
+//     const maxAttempts = 5;
 
-    while (attempts < maxAttempts) {
-        try {
-            const response = await axios.get(url);
-            return response.data.data[0];
-        } catch (error) {
-            if (error.response && error.response.status === 429) {
-                attempts++;
-                const retryAfter = error.response.headers['retry-after'] || 1;
-                console.log(`Слишком много запросов. Ожидание ${retryAfter} секунд...`);
-                await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
-            } else {
-                throw error;
-            }
-        }
-    }
+//     while (attempts < maxAttempts) {
+//         try {
+//             const response = await axios.get(url);
+//             return response.data.data[0];
+//         } catch (error) {
+//             if (error.response && error.response.status === 429) {
+//                 attempts++;
+//                 const retryAfter = error.response.headers['retry-after'] || 1;
+//                 console.log(`Слишком много запросов. Ожидание ${retryAfter} секунд...`);
+//                 await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+//             } else {
+//                 throw error;
+//             }
+//         }
+//     }
 
-    throw new Error('Не удалось получить товар после нескольких попыток');
-}
-  // Функция для генерации товаров
-  async function generateProducts(count) {
-      try {
+//     throw new Error('Не удалось получить товар после нескольких попыток');
+// }
+//   // Функция для генерации товаров
+//   async function generateProducts(count) {
+//       try {
 
-          // Генерируем продавцов
-          const users = [];
-          for (let i = 2; i < 15; i++) {
-              const login = `user${i + 1}`;
-              const fullname = `Пользователь ${i + 1}`;
-              const address = `Адрес ${i + 1}`;
-              const phone_number = `+7 900 000 00 0${i + 1}`;
-              const password = generateRandomPassword(10);
-              const role = 'Продавец';
+//           // Генерируем продавцов
+//           const users = [];
+//           for (let i = 2; i < 15; i++) {
+//               const login = `user${i + 1}`;
+//               const fullname = `Пользователь ${i + 1}`;
+//               const address = `Адрес ${i + 1}`;
+//               const phone_number = `+7 900 000 00 0${i + 1}`;
+//               const password = generateRandomPassword(10);
+//               const role = 'Продавец';
   
-              await addUser (login, fullname, address, phone_number, password, role);
-              users.push(login); 
-          }
+//               await addUser (login, fullname, address, phone_number, password, role);
+//               users.push(login); 
+//           }
   
-        // Генерируем товары
-        for (let i = 0; i < count; i++) {
-          const product = await fetchProduct();
+//         // Генерируем товары
+//         for (let i = 0; i < count; i++) {
+//           const product = await fetchProduct();
 
 
-          const name = product.name;
-          const price = parseFloat((Math.random() * 1000).toFixed(2));
-          const user_key = users[Math.floor(Math.random() * users.length)];
-          const category = product.category || categories[Math.floor(Math.random() * categories.length)];
-          const photo_id = null;
+//           const name = product.name;
+//           const price = parseFloat((Math.random() * 1000).toFixed(2));
+//           const user_key = users[Math.floor(Math.random() * users.length)];
+//           const category = product.category || categories[Math.floor(Math.random() * categories.length)];
+//           const photo_id = null;
 
-          const query = 'INSERT INTO Products (name, price, user_key, category, photo_id) VALUES ($1, $2, $3, $4, $5)';
-          await client.query(query, [name, price, user_key, category, photo_id]);
+//           const query = 'INSERT INTO Products (name, price, user_key, category, photo_id) VALUES ($1, $2, $3, $4, $5)';
+//           await client.query(query, [name, price, user_key, category, photo_id]);
 
-          console.log(`Товар добавлен: ${name}, Цена: ${price} ₽, Категория: ${category}, Пользователь: ${user_key}`);
-      }
+//           console.log(`Товар добавлен: ${name}, Цена: ${price} ₽, Категория: ${category}, Пользователь: ${user_key}`);
+//       }
 
-      console.log('Генерация товаров завершена!');
-  } catch (error) {
-      console.error('Ошибка:', error);
-  } finally {
-      await client.end(); 
-  }
-}
+//       console.log('Генерация товаров завершена!');
+//   } catch (error) {
+//       console.error('Ошибка:', error);
+//   } finally {
+//       await client.end(); 
+//   }
+// }
 
-generateProducts(100);
+// generateProducts(100);
 
 app.use(bodyParser.json());
 app.use(cors());
