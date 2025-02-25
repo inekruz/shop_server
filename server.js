@@ -563,6 +563,20 @@ app.post('/getCountDelivery', async (req, res) => {
   }
 });
 
+// Получение бонусов
+app.post('/getBonus', async (req, res) => {
+  const { login } = req.body;
+
+  try {
+    const result = await client.query('SELECT id, title, description, photo_path, date_end, bonus_price, user_login AS count FROM bonus WHERE user_login = $1', [login]);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Ошибка при получении кол-во доставки:', error);
+    res.status(500).json({ error: 'Ошибка при получении доставки' });
+  }
+});
+
 http.createServer((req, res) => {
   res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
   res.end();
