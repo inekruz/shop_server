@@ -568,12 +568,26 @@ app.post('/getBonus', async (req, res) => {
   const { login } = req.body;
 
   try {
-    const result = await client.query('SELECT id, title, description, photo_path, date_end, bonus_price, user_login AS count FROM bonus WHERE user_login = $1', [login]);
+    const result = await client.query('SELECT * FROM bonus WHERE user_login = $1', [login]);
 
     res.json(result.rows);
   } catch (error) {
-    console.error('Ошибка при получении кол-во доставки:', error);
-    res.status(500).json({ error: 'Ошибка при получении доставки' });
+    console.error('Ошибка при получении бонусов:', error);
+    res.status(500).json({ error: 'Ошибка при получении бонусов' });
+  }
+});
+
+// Получение бонусов
+app.post('/getAds', async (req, res) => {
+  const { ad_key_id } = req.body;
+
+  try {
+    const result = await client.query('SELECT * FROM bonus WHERE id = $1', [ad_key_id]);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Ошибка при получении рекламы:', error);
+    res.status(500).json({ error: 'Ошибка при получении рекламы' });
   }
 });
 
