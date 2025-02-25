@@ -13,8 +13,12 @@ const { log } = require('console');
 const { startupSnapshot } = require('v8');
 const portHttp = 80;  // HTTP
 const portHttps = 443;  // HTTPS
+require('dotenv').config();
 
-const client = new Client(config.dbConfig);
+const client = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+});
 
 // ключ
 const secretKey = 'jFfh23-fh3ri8-JF73ry-shf32r';
